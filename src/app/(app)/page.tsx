@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Hero from './_home/Hero'
 import HeroSection from './_home/HeroSection'
 import HomeBody from './_home/HomeBody'
+import { getHeroSlides } from './_home/hero-slides'
 import { HERO_FALLBACK_CATEGORIES, HERO_FALLBACK_STATS } from './_home/home-fallback'
 import { getEditorsPickStays } from '@/lib/payload-queries'
 import { buildHomepageJsonLd, serializeJsonLd } from '@/lib/jsonld'
@@ -18,6 +19,7 @@ export default async function HomePage() {
   // Top stays feed the homepage ItemList. Real Payload data; cached.
   const topStays = await getEditorsPickStays()
   const homeJsonLd = buildHomepageJsonLd(topStays)
+  const heroSlides = getHeroSlides(new Date())
 
   return (
     <div className="min-h-screen" style={{ background: 'oklch(0.975 0.012 85)' }}>
@@ -28,10 +30,14 @@ export default async function HomePage() {
       <link rel="preconnect" href="https://img.uniquestaysusa.com" crossOrigin="" />
       <Suspense
         fallback={
-          <Hero categories={HERO_FALLBACK_CATEGORIES} stats={HERO_FALLBACK_STATS} />
+          <Hero
+            slides={heroSlides}
+            categories={HERO_FALLBACK_CATEGORIES}
+            stats={HERO_FALLBACK_STATS}
+          />
         }
       >
-        <HeroSection />
+        <HeroSection slides={heroSlides} />
       </Suspense>
       <Suspense fallback={null}>
         <HomeBody />

@@ -39,6 +39,8 @@ afterEach(() => {
   cleanup()
 })
 
+const RENDERED_AT = Date.parse('2026-05-12T12:00:00.000Z')
+
 function journalPost(overrides: Partial<NormalizedJournalPost> = {}): NormalizedJournalPost {
   const id = overrides.id ?? 1
 
@@ -73,7 +75,7 @@ describe('JournalContent archive board', () => {
       journalPost({ id: 5, title: 'A-Frame Ledger' }),
     ]
 
-    render(<JournalContent posts={posts} />)
+    render(<JournalContent renderedAt={RENDERED_AT} posts={posts} />)
 
     expect(screen.getAllByText('Latest Dispatch')).toHaveLength(1)
     expect(screen.getAllByText('Treehouse Field Notes')).toHaveLength(1)
@@ -84,14 +86,14 @@ describe('JournalContent archive board', () => {
   })
 
   it('renders a single post as the featured dispatch', () => {
-    render(<JournalContent posts={[journalPost({ id: 1, title: 'Only Dispatch' })]} />)
+    render(<JournalContent renderedAt={RENDERED_AT} posts={[journalPost({ id: 1, title: 'Only Dispatch' })]} />)
 
     expect(screen.getByText('Only Dispatch')).toBeInTheDocument()
     expect(screen.queryByLabelText('Filed dispatches')).not.toBeInTheDocument()
   })
 
   it('renders the empty state when no posts exist', () => {
-    render(<JournalContent posts={[]} />)
+    render(<JournalContent renderedAt={RENDERED_AT} posts={[]} />)
 
     expect(screen.getByText('The dispatch desk is still being assembled.')).toBeInTheDocument()
     expect(screen.queryByLabelText('Filed dispatches')).not.toBeInTheDocument()
@@ -100,6 +102,7 @@ describe('JournalContent archive board', () => {
   it('renders image-less archive posts as linked paper files without an image element', () => {
     render(
       <JournalContent
+        renderedAt={RENDERED_AT}
         posts={[
           journalPost({ id: 1, title: 'Latest Dispatch' }),
           journalPost({
