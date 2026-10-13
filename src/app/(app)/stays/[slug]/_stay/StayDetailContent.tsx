@@ -161,9 +161,10 @@ function PolaroidGalleryStrip({
 interface StayDetailContentProps {
   stay: NormalizedStay
   related: NormalizedStay[]
+  renderedAt: number
 }
 
-export default function StayDetailContent({ stay, related }: StayDetailContentProps) {
+export default function StayDetailContent({ stay, related, renderedAt }: StayDetailContentProps) {
   useScrollReveal()
 
   useEffect(() => {
@@ -200,8 +201,8 @@ export default function StayDetailContent({ stay, related }: StayDetailContentPr
   const firstSentence = (text: string) => { const s = text.split('.')[0]; return s ? s + '.' : '' }
   const pullQuote = stay.editorNote || (stay.body ? firstSentence(stay.body) : (stay.description ? firstSentence(stay.description) : ''))
 
-  const now = new Date()
-  const postmarkDate = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  const now = new Date(renderedAt)
+  const postmarkDate = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
     .replace(' ', ' · ').toUpperCase()
 
   const PLATFORM_LABELS: Record<string, string> = {
@@ -287,7 +288,7 @@ export default function StayDetailContent({ stay, related }: StayDetailContentPr
                   width: 'fit-content', background: 'oklch(0.55 0.14 38 / 0.2)', backdropFilter: 'blur(4px)',
                   marginBottom: 10,
                 }}>
-                  ✦ &nbsp; Editor&apos;s Pick · {now.getFullYear()}
+                  ✦ &nbsp; Editor&apos;s Pick · {now.getUTCFullYear()}
                 </div>
               )}
               <h1 style={{

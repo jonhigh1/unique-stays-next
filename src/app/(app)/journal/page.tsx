@@ -15,5 +15,5 @@ export const metadata: Metadata = {
 
 export default async function JournalPage() {
   const posts = await getAllJournalPosts()
-  return <JournalContent posts={posts} />
+  return <JournalContent posts={posts} renderedAt={Date.now()} />
 }

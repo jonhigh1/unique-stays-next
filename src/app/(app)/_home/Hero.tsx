@@ -1,17 +1,18 @@
 import Image from 'next/image'
 import type { CategoryConfig } from '@/lib/categories-config'
-import { HERO_FIRST_SLIDE } from './hero-slides'
+import type { HeroSlide } from './hero-slides'
 import HeroClient from './HeroClient'
 import HeroCopy, { type HeroStat } from './HeroCopy'
 import HeroMarquee from './HeroMarquee'
 
 interface HeroProps {
+  slides: HeroSlide[]
   categories: CategoryConfig[]
   stats: HeroStat[]
 }
 
-export default function Hero({ categories, stats }: HeroProps) {
-  const first = HERO_FIRST_SLIDE
+export default function Hero({ slides, categories, stats }: HeroProps) {
+  const first = slides[0]
 
   return (
     <div
@@ -31,7 +32,7 @@ export default function Hero({ categories, stats }: HeroProps) {
           className="object-cover"
         />
       </div>
-      <HeroClient />
+      <HeroClient slides={slides} />
       <HeroCopy stats={stats} />
       <HeroMarquee categories={categories} />
     </div>

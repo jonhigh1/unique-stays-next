@@ -59,7 +59,7 @@ export default async function StayPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
-      <StayDetailContent stay={stay} related={related} />
+      <StayDetailContent stay={stay} related={related} renderedAt={Date.now()} />
     </>
   )
 }

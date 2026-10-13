@@ -3,10 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { INITIAL_SLIDES, SLIDE_MS } from './hero-slides'
+import { SLIDE_MS, type HeroSlide } from './hero-slides'
 
-export default function HeroClient() {
-  const [slides] = useState(INITIAL_SLIDES)
+export default function HeroClient({ slides }: { slides: HeroSlide[] }) {
   const [active, setActive] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 

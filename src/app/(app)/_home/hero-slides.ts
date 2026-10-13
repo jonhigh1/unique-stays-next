@@ -23,8 +23,9 @@ export const HERO_POOL: HeroSlide[] = [
   { url: 'https://pub-b693088e04e14696a9caf041d4221a3a.r2.dev/hero/castle-fog.jpg', label: 'Castle in Morning Fog', location: 'Bavaria', categoryLabel: 'Castles & Estates', categoryEmoji: '🏰' },
 ]
 
-// Deterministic daily rotation — no hydration mismatch
-const DAY_OFFSET = new Date().getDate() % HERO_POOL.length
-export const INITIAL_SLIDES = [...HERO_POOL.slice(DAY_OFFSET), ...HERO_POOL.slice(0, DAY_OFFSET)].slice(0, SHOW_COUNT)
-export const HERO_FIRST_IMAGE = INITIAL_SLIDES[0].url
-export const HERO_FIRST_SLIDE = INITIAL_SLIDES[0]
+// Daily rotation keyed to the UTC day. Call on the server only and pass the result to
+// client components: the browser's local day can differ and cause a hydration mismatch.
+export function getHeroSlides(date: Date): HeroSlide[] {
+  const offset = date.getUTCDate() % HERO_POOL.length
+  return [...HERO_POOL.slice(offset), ...HERO_POOL.slice(0, offset)].slice(0, SHOW_COUNT)
+}

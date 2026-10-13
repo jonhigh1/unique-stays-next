@@ -122,9 +122,11 @@ function PostmarkSVG({
 function DispatchCard({
   post,
   index,
+  renderedAt,
 }: {
   post: JournalPostSummary
   index: number
+  renderedAt: number
 }) {
   const hasImage = Boolean(post.heroImageUrl)
   const paperVariant = hasImage ? '' : ' dispatch-dossier--paper'
@@ -134,7 +136,7 @@ function DispatchCard({
   const pinX = pinXs[index % 4]
   const isNew =
     post.publishedAt &&
-    Date.now() - new Date(post.publishedAt).getTime() < 14 * 86400000
+    renderedAt - new Date(post.publishedAt).getTime() < 14 * 86400000
 
   return (
     <Link href={`/journal/${post.slug}`} className="dispatch-dossier-link">
@@ -195,7 +197,13 @@ function DispatchCard({
   )
 }
 
-export default function JournalContent({ posts }: { posts: JournalPostSummary[] }) {
+export default function JournalContent({
+  posts,
+  renderedAt,
+}: {
+  posts: JournalPostSummary[]
+  renderedAt: number
+}) {
   const featured = posts[0] ?? null
   const rest = posts.slice(1)
 
@@ -270,7 +278,7 @@ export default function JournalContent({ posts }: { posts: JournalPostSummary[] 
               </div>
               <div className="journal-archive-board__grid">
                 {rest.map((post, index) => (
-                  <DispatchCard key={post.id} post={post} index={index} />
+                  <DispatchCard key={post.id} post={post} index={index} renderedAt={renderedAt} />
                 ))}
               </div>
             </div>

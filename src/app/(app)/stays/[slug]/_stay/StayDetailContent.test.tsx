@@ -23,6 +23,8 @@ vi.mock('next/link', () => ({
   ),
 }))
 
+const RENDERED_AT = Date.parse('2026-05-12T12:00:00.000Z')
+
 const stay: NormalizedStay = {
   id: 7,
   slug: 'test-stay',
@@ -81,7 +83,7 @@ afterEach(() => {
 
 describe('StayDetailContent gallery', () => {
   it('renders every gallery image as clickable bottom polaroids on desktop and mobile', () => {
-    render(<StayDetailContent stay={stay} related={[]} />)
+    render(<StayDetailContent stay={stay} related={[]} renderedAt={RENDERED_AT} />)
 
     const photoButtons = screen.getAllByRole('button', { name: /^View photo \d+$/ })
     expect(photoButtons).toHaveLength(12)
@@ -97,7 +99,7 @@ describe('StayDetailContent gallery', () => {
 
 describe('StayDetailContent mobile booking module', () => {
   it('groups price, rating, caveat, facts, and the primary booking link', () => {
-    render(<StayDetailContent stay={stay} related={[]} />)
+    render(<StayDetailContent stay={stay} related={[]} renderedAt={RENDERED_AT} />)
 
     const booking = screen.getByTestId('mobile-booking-details')
 
@@ -116,7 +118,7 @@ describe('StayDetailContent mobile booking module', () => {
   })
 
   it('preserves affiliate analytics for the mobile booking link', () => {
-    render(<StayDetailContent stay={stay} related={[]} />)
+    render(<StayDetailContent stay={stay} related={[]} renderedAt={RENDERED_AT} />)
 
     fireEvent.click(screen.getByRole('link', { name: 'Book Test Stay on VRBO' }))
 
@@ -130,7 +132,7 @@ describe('StayDetailContent mobile booking module', () => {
   })
 
   it('keeps the booking module stable when rating data is missing', () => {
-    render(<StayDetailContent stay={{ ...stay, rating: null, reviewCount: null }} related={[]} />)
+    render(<StayDetailContent stay={{ ...stay, rating: null, reviewCount: null }} related={[]} renderedAt={RENDERED_AT} />)
 
     const booking = screen.getByTestId('mobile-booking-details')
 
@@ -142,13 +144,13 @@ describe('StayDetailContent mobile booking module', () => {
   })
 
   it('uses singular fact labels when the stay has one bedroom and bath', () => {
-    render(<StayDetailContent stay={{ ...stay, bedrooms: 1, bathrooms: 1 }} related={[]} />)
+    render(<StayDetailContent stay={{ ...stay, bedrooms: 1, bathrooms: 1 }} related={[]} renderedAt={RENDERED_AT} />)
 
     expect(screen.getByLabelText('Stay facts: Bend, Oregon · 1 bedroom · 1 bath · Sleeps 4')).toBeInTheDocument()
   })
 
   it('shows a compact sticky booking bar with the same outbound contract', () => {
-    render(<StayDetailContent stay={stay} related={[]} />)
+    render(<StayDetailContent stay={stay} related={[]} renderedAt={RENDERED_AT} />)
 
     const sticky = screen.getByTestId('mobile-sticky-booking')
 
